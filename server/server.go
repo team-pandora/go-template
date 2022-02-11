@@ -69,3 +69,9 @@ func (s *server) Run() {
 		log.Fatal(err)
 	}
 }
+
+// Serve creates a server and starts it.
+func Serve(port string) {
+	server := NewServer(port)
+	server.Run()
+}

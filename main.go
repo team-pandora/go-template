@@ -7,5 +7,5 @@ import (
 
 func main() {
 	config.Init()
-	server.NewServer(config.Config.Service.Port).Run()
+	server.Serve(config.Config.Service.Port)
 }
