@@ -16,6 +16,7 @@ type server struct {
 	server *http.Server
 }
 
+// NewServer creates a new server.
 func NewServer(port string) Server {
 	ginHandler := gin.Default() // TODO: change to gin.New()
 
@@ -53,11 +54,14 @@ func NewServer(port string) Server {
 		MaxAge:           0,
 	}))
 
+	ginHandler.Use(ErrorHandler)
+
 	UseServerRouter(ginHandler)
 
 	return &srv
 }
 
+// Run starts the server.
 func (s *server) Run() {
 	log.Printf("Server started on port %v\n", s.server.Addr)
 

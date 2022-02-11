@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// UseServerRouter registers the server router with the provided gin router.
 func UseServerRouter(router *gin.Engine) {
 	router.NoRoute(func(c *gin.Context) {
 		c.String(404, "Invalid Route")
