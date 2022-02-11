@@ -10,7 +10,7 @@ import (
 )
 
 // Config holds the global configuration for the service
-var Config *ConfigStruct = &ConfigStruct{}
+var Config = &ConfigStruct{}
 
 // ConfigStruct defines the global configuration structure
 type ConfigStruct struct {
