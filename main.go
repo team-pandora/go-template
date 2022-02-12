@@ -15,8 +15,8 @@ func main() {
 // TODO:
 // - add docker related files
 // - add tests
-// - write README.md
 // - add validators for the feature
 // - add CI/CD
 // - add logger
 // - cleanup error handling
+// - add authentication
