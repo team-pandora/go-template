@@ -6,6 +6,7 @@
         "enabled": true,
         "delay": 500
     },
+    "go.lintTool": "golint",
     "[yaml]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.insertSpaces": true,

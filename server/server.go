@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Server is the interface for the server.
 type Server interface {
 	Run()
 }
@@ -18,6 +19,7 @@ type server struct {
 
 // NewServer creates a new server.
 func NewServer(port string) Server {
+	gin.DisableConsoleColor()
 	ginHandler := gin.Default() // TODO: change to gin.New()
 
 	srv := server{
@@ -54,9 +56,9 @@ func NewServer(port string) Server {
 		MaxAge:           0,
 	}))
 
-	ginHandler.Use(ErrorHandler)
+	ginHandler.Use(errorHandler)
 
-	UseServerRouter(ginHandler)
+	useServerRouter(ginHandler)
 
 	return &srv
 }

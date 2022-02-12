@@ -11,7 +11,7 @@ import (
 // errorHandler executes all the middlewares and then checks for errors.
 // If an error is found, it is parsed into a ServerError and sent to the client.
 // If multiple errors are found, they are all parsed into ServerErrors and sent to the client as a single ServerError that contains all errors in the Meta field.
-func ErrorHandler(c *gin.Context) {
+func errorHandler(c *gin.Context) {
 	// execute all middleware logic
 	c.Next()
 

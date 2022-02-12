@@ -1,23 +1,21 @@
 package feature
 
 import (
-	"net/http"
-
 	"github.com/MichaelSimkin/go-template/server/errors"
 	"github.com/gin-gonic/gin"
 )
 
-// UseFeatureRouter registers the feature router with the provided gin router.
-func UseFeatureRotuer(router *gin.RouterGroup) {
-	router.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "Feature Works!")
-	})
+// RegisterRotuer registers the feature router with the provided gin router.
+func RegisterRotuer(router *gin.RouterGroup) {
+	router.POST("/", service.createDocumet)
+	router.GET("/", service.getDocumets)
 
+	// tests for error handling
 	router.GET("/error", func(c *gin.Context) {
 		c.Error(errors.FeatureError)
 		c.Abort()
 	})
-
+	// tests for error handling
 	router.GET("/multipleErrors", func(c *gin.Context) {
 		c.Error(errors.FeatureError)
 		c.Error(errors.FeatureError)
