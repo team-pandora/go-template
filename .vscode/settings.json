@@ -1,3 +1,15 @@
 {
-    "makefile.extensionOutputFolder": "./.vscode"
+    "editor.formatOnSave": true,
+    "go.formatTool": "gofmt",
+    "go.lintOnSave": "workspace",
+    "go.liveErrors": {
+        "enabled": true,
+        "delay": 500
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.quickSuggestions": true
+    }
 }
