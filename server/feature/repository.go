@@ -59,7 +59,7 @@ func decodeMongoDocuments(ctx context.Context, cursor *mongo.Cursor) ([]*feature
 	documents := []*featureModel{}
 
 	for cursor.Next(ctx) {
-		var document *featureModel
+		var document = &featureModel{}
 		err := cursor.Decode(document)
 		if err != nil {
 			return nil, errors.NewFailedToDecodeError(err)

@@ -21,7 +21,7 @@ func errorHandler(c *gin.Context) {
 
 	var parsedErrors = make([]*errors.ServerError, 0, len(c.Errors))
 	for _, err := range c.Errors {
-		parsedErrors = append(parsedErrors, parseError(err))
+		parsedErrors = append(parsedErrors, parseError(err.Err))
 	}
 
 	if len(parsedErrors) == 1 {
@@ -39,8 +39,8 @@ func errorHandler(c *gin.Context) {
 // If the error is not a predefined error, parse it into a ServerError.
 func parseError(err error) *errors.ServerError {
 	switch err := err.(type) {
-	case *errors.ServerError:
-		return err
+	case errors.ServerError:
+		return &err
 	default:
 		return &errors.ServerError{
 			Code:    http.StatusInternalServerError,

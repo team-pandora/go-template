@@ -13,10 +13,11 @@ func main() {
 }
 
 // TODO:
+// - cleanup error handling !!!
 // - add docker related files
 // - add tests
 // - add validators for the feature
 // - add CI/CD
 // - add logger
-// - cleanup error handling
 // - add authentication
+// - add swagger
