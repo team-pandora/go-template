@@ -20,7 +20,7 @@ type server struct {
 // NewServer creates a new server.
 func NewServer(port string) Server {
 	gin.DisableConsoleColor()
-	ginHandler := gin.Default() // TODO: change to gin.New()
+	ginHandler := gin.New()
 
 	srv := server{
 		server: &http.Server{
@@ -29,34 +29,22 @@ func NewServer(port string) Server {
 		},
 	}
 
-	// TODO ginHandler should look something like this:
-	// // Setup logging, metrics, cors middlewares.
-	// r.Use(
-	// 	// Ignore logging healthcheck routes.
-	// 	gin.LoggerWithWriter(gin.DefaultWriter, healthcheckRoute),
-	// 	gin.Recovery(),
-	// 	apmgin.Middleware(r),
-	// 	cors.New(corsRouterConfig()),
-	// 	// Elasticsearch logger middleware.
-	// 	loggermiddleware.SetLogger(
-	// 		&loggermiddleware.Config{
-	// 			Logger:             logger,
-	// 			SkipPath:           []string{healthcheckRoute},
-	// 			SkipBodyPathRegexp: regexp.MustCompile(uploadRouteRegexp),
-	// 		},
-	// 	),
-	// )
-
-	ginHandler.Use(cors.New(cors.Config{
-		AllowAllOrigins:  true,
-		AllowMethods:     []string{"GET", "PUT", "DELETE", "POST"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowHeaders:     []string{"Content-Type"},
-		AllowCredentials: true,
-		MaxAge:           0,
-	}))
-
-	ginHandler.Use(errorHandler)
+	ginHandler.Use(
+		gin.Recovery(),
+		errorHandler,
+		// TODO:
+		gin.Logger(),
+		// gin.LoggerWithWriter(gin.DefaultWriter, healthcheckRoute),
+		// apmgin.Middleware(r),
+		cors.New(cors.Config{
+			AllowAllOrigins:  true,
+			AllowMethods:     []string{"GET", "PUT", "DELETE", "POST"},
+			ExposeHeaders:    []string{"Content-Length"},
+			AllowHeaders:     []string{"Content-Type"},
+			AllowCredentials: true,
+			MaxAge:           0,
+		}),
+	)
 
 	useServerRouter(ginHandler)
 
