@@ -10,9 +10,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var repository = &featureRepository{}
+var repository *featureRepository
 
 type featureRepository struct{}
+
+func initRepository() {
+	repository = &featureRepository{}
+}
 
 func (featureRepository) createDocument(ctx context.Context, document featureModel) (*featureModel, error) {
 	result, err := database.FeatureCollection.InsertOne(ctx, document)

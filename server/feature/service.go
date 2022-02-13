@@ -7,14 +7,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var service = &featureService{}
+var service *featureService
 
 type featureService struct{}
+
+// initService initializes the service, validate and repository global variables.
+func initService() {
+	initValidator()
+	initRepository()
+	service = &featureService{}
+}
 
 func (featureService) createDocumet(c *gin.Context) {
 	// get the request body
 	var body = &featureModel{}
-	err := c.BindJSON(body)
+	err := c.ShouldBindJSON(body)
+	if err != nil {
+		c.Error(errors.NewInvalidRequestError(err))
+		c.Abort()
+		return
+	}
+
+	// validate the request body
+	err = validate.Struct(body)
 	if err != nil {
 		c.Error(errors.NewInvalidRequestError(err))
 		c.Abort()
@@ -34,7 +49,10 @@ func (featureService) createDocumet(c *gin.Context) {
 }
 
 func (featureService) getDocumets(c *gin.Context) {
-	filters := c.Query("filters")
+	filters, ok := c.GetQuery("filters")
+	if !ok {
+		filters = "{}"
+	}
 	result, err := repository.getDocuments(c.Request.Context(), []byte(filters))
 	if err != nil {
 		c.Error(err)
