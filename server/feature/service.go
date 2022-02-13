@@ -19,25 +19,27 @@ func initService() {
 }
 
 func (featureService) createDocumet(c *gin.Context) {
-	// get the request body
-	var body = &featureModel{}
-	err := c.ShouldBindJSON(body)
+	// get the request document
+	var document = &featureModel{}
+	err := c.ShouldBindJSON(document)
 	if err != nil {
 		c.Error(errors.NewInvalidRequestError(err))
 		c.Abort()
 		return
 	}
 
-	// validate the request body
-	err = validate.Struct(body)
+	// validate the request document
+	err = validate.Struct(document)
 	if err != nil {
 		c.Error(errors.NewInvalidRequestError(err))
 		c.Abort()
 		return
 	}
 
-	// create new document and insert it into the database
-	var document = newFeatureFromPartial(*body)
+	// set document timestamps
+	document.setTimestamps()
+
+	// create the document
 	result, err := repository.createDocument(c.Request.Context(), *document)
 	if err != nil {
 		c.Error(err)

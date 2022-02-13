@@ -14,32 +14,13 @@ type featureModel struct {
 	UpdatedAt time.Time          `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
 }
 
-// newFeature creates a new feature object with the given data and current timestamps.
-func newFeature(data string) *featureModel {
-	feature := featureModel{Data: data}
+// setTimestamps sets the createdAt and updatedAt fields to the current time.
+func (feature *featureModel) setTimestamps() {
 	feature.CreatedAt = time.Now()
 	feature.UpdatedAt = feature.CreatedAt
-	return &feature
 }
 
-// newFeatureFromPartial creates a new feature object from the given partial feature object.
-func newFeatureFromPartial(feature featureModel) *featureModel {
-	feature.CreatedAt = time.Now()
-	feature.UpdatedAt = feature.CreatedAt
-	return &feature
-}
-
-// newFeatureUpdate creates a new feature update object with the given data and current updatedAt timestamp.
-func newFeatureUpdate(data string) *featureModel {
-	feature := featureModel{
-		Data:      data,
-		UpdatedAt: time.Now(),
-	}
-	return &feature
-}
-
-//newFeatureUpdateFromPartial creates a new feature update object from the given partial feature object with the current updatedAt timestamp.
-func newFeatureUpdateFromPartial(feature featureModel) *featureModel {
+// setUpdatedAt sets the updatedAt field to the current time.
+func (feature *featureModel) setUpdatedAt() {
 	feature.UpdatedAt = time.Now()
-	return &feature
 }

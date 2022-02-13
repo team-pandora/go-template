@@ -16,7 +16,6 @@ func main() {
 // - cleanup error handling !!!
 // - add docker related files
 // - add tests
-// - add validators for the feature
 // - add CI/CD
 // - add logger
 // - add authentication
