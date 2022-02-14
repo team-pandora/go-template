@@ -13,7 +13,6 @@ func main() {
 }
 
 // TODO:
-// - cleanup error handling !!!
 // - add docker related files
 // - add tests
 // - add CI/CD

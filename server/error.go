@@ -45,6 +45,6 @@ func parseError(err error) *errors.ServerError {
 		return &errors.ServerError{
 			Code:    http.StatusInternalServerError,
 			Message: fmt.Sprintf("Internal Server Error: %v", err),
-		}
+			Meta:    errors.ErrorMeta{"error": err}}
 	}
 }

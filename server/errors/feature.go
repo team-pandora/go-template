@@ -13,10 +13,10 @@ func NewInvalidRequestError(err error) ServerError {
 	return ServerError{Code: http.StatusBadRequest, Message: "Invalid request", Meta: ErrorMeta{"error": err.Error()}}
 }
 
-// DuplicateKeyError is an error that is used when a mongo duplicate key error occurs.
+// DuplicateKeyError is used when a mongo duplicate key error occurs.
 var DuplicateKeyError = ServerError{Code: http.StatusConflict, Message: "Document already exists"}
 
-// InvalidMongoIDError is an error that is used when a returned mongo ID is invalid.
+// InvalidMongoIDError is used when a returned mongo ID is invalid.
 var InvalidMongoIDError = ServerError{Code: http.StatusConflict, Message: "Mongo returned invalid id"}
 
 // NewUnknownMongoError creates a new unknown mongo error with the provided error in the meta.
@@ -25,13 +25,13 @@ func NewUnknownMongoError(err error) ServerError {
 }
 
 // NewInvalidFiltersError is used to return an error when the filters provided to the mongo find method are invalid.
-// The mongo error is returned in the meta.
+// The error is returned in the meta.
 func NewInvalidFiltersError(err error) ServerError {
 	return ServerError{Code: http.StatusBadRequest, Message: "Invalid Filters", Meta: ErrorMeta{"error": err.Error()}}
 }
 
 // NewFailedToDecodeError is used to return an error when the server fails to decode a mongo document.
-// The mongo error is returned in the meta.
+// The error is returned in the meta.
 func NewFailedToDecodeError(err error) ServerError {
 	return ServerError{Code: http.StatusInternalServerError, Message: "Failed to decode mongo document", Meta: ErrorMeta{"error": err.Error()}}
 }

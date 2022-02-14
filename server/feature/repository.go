@@ -11,16 +11,10 @@ import (
 )
 
 // This exported Repository variable is used to access the repository methods.
-var Repository IRepository = &repository{}
+var Repository = &repository{}
 
 // The repository methods are defined on this struct.
 type repository struct{}
-
-// IRRepository is an interface that defines the repository methods.
-type IRepository interface {
-	createDocument(ctx context.Context, document FeatureModel) (*FeatureModel, error)
-	getDocuments(ctx context.Context, filters []byte) ([]*FeatureModel, error)
-}
 
 func (repository) createDocument(ctx context.Context, document FeatureModel) (*FeatureModel, error) {
 	result, err := database.FeatureCollection.InsertOne(ctx, document)
@@ -41,9 +35,10 @@ func (repository) createDocument(ctx context.Context, document FeatureModel) (*F
 	return &document, nil
 }
 
-func (repository) getDocuments(ctx context.Context, filters []byte) ([]*FeatureModel, error) {
-	var searchFilters primitive.M
-	err := bson.UnmarshalExtJSON(filters, true, &searchFilters)
+func (repository) getDocuments(ctx context.Context, filters string) ([]*FeatureModel, error) {
+	// Create the filters object
+	var searchFilters = bson.M{}
+	err := bson.UnmarshalExtJSON([]byte(filters), true, &searchFilters)
 	if err != nil {
 		return nil, errors.NewInvalidFiltersError(err)
 	}
