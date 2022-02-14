@@ -13,6 +13,7 @@ import (
 // This exported Repository variable is used to access the repository methods.
 var Repository IRepository = &repository{}
 
+// The repository methods are defined on this struct.
 type repository struct{}
 
 // IRRepository is an interface that defines the repository methods.

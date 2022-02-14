@@ -17,7 +17,7 @@ type IService interface {
 }
 
 func (service) createDocumet(c *gin.Context) {
-	// get the request document
+	// Get the request document
 	var document = &FeatureModel{}
 	err := c.ShouldBindJSON(document)
 	if err != nil {
@@ -26,7 +26,7 @@ func (service) createDocumet(c *gin.Context) {
 		return
 	}
 
-	// validate the request document
+	// Validate the request document
 	err = Validate.Struct(document)
 	if err != nil {
 		c.Error(errors.NewInvalidRequestError(err))
@@ -34,10 +34,10 @@ func (service) createDocumet(c *gin.Context) {
 		return
 	}
 
-	// set document timestamps
+	// Set document timestamps
 	document.setTimestamps()
 
-	// create the document
+	// Create the document
 	result, err := Repository.createDocument(c.Request.Context(), *document)
 	if err != nil {
 		c.Error(err)

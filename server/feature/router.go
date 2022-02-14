@@ -10,12 +10,12 @@ func RegisterRotuer(router *gin.RouterGroup) {
 	router.POST("/", Service.createDocumet)
 	router.GET("/", Service.getDocumets)
 
-	// tests for error handling
+	// Tests for error handling
 	router.GET("/error", func(c *gin.Context) {
 		c.Error(errors.FeatureError)
 		c.Abort()
 	})
-	// tests for error handling
+	// Tests for error handling
 	router.GET("/multipleErrors", func(c *gin.Context) {
 		c.Error(errors.FeatureError)
 		c.Error(errors.FeatureError)

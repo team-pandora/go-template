@@ -12,7 +12,7 @@ import (
 // If an error is found, it is parsed into a ServerError and sent to the client.
 // If multiple errors are found, they are all parsed into ServerErrors and sent to the client as a single ServerError that contains all errors in the Meta field.
 func errorHandler(c *gin.Context) {
-	// execute all middleware logic
+	// Execute all middleware logic
 	c.Next()
 
 	if len(c.Errors) == 0 {
