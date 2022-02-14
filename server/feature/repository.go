@@ -10,15 +10,18 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var repository *featureRepository
+// This exported Repository variable is used to access the repository methods.
+var Repository IRepository = &repository{}
 
-type featureRepository struct{}
+type repository struct{}
 
-func initRepository() {
-	repository = &featureRepository{}
+// IRRepository is an interface that defines the repository methods.
+type IRepository interface {
+	createDocument(ctx context.Context, document FeatureModel) (*FeatureModel, error)
+	getDocuments(ctx context.Context, filters []byte) ([]*FeatureModel, error)
 }
 
-func (featureRepository) createDocument(ctx context.Context, document featureModel) (*featureModel, error) {
+func (repository) createDocument(ctx context.Context, document FeatureModel) (*FeatureModel, error) {
 	result, err := database.FeatureCollection.InsertOne(ctx, document)
 	if mongo.IsDuplicateKeyError(err) {
 		return nil, errors.DuplicateKeyError
@@ -37,7 +40,7 @@ func (featureRepository) createDocument(ctx context.Context, document featureMod
 	return &document, nil
 }
 
-func (featureRepository) getDocuments(ctx context.Context, filters []byte) ([]*featureModel, error) {
+func (repository) getDocuments(ctx context.Context, filters []byte) ([]*FeatureModel, error) {
 	var searchFilters primitive.M
 	err := bson.UnmarshalExtJSON(filters, true, &searchFilters)
 	if err != nil {
@@ -47,7 +50,7 @@ func (featureRepository) getDocuments(ctx context.Context, filters []byte) ([]*f
 	// Find the documents in the collection
 	cursor, err := database.FeatureCollection.Find(ctx, searchFilters)
 	if err == mongo.ErrNoDocuments {
-		return []*featureModel{}, nil
+		return []*FeatureModel{}, nil
 	}
 	if err != nil {
 		return nil, errors.NewUnknownMongoError(err)
@@ -59,11 +62,11 @@ func (featureRepository) getDocuments(ctx context.Context, filters []byte) ([]*f
 }
 
 // decodeMongoDocuments decodes the documents returned by the MongoDB cursor.
-func decodeMongoDocuments(ctx context.Context, cursor *mongo.Cursor) ([]*featureModel, error) {
-	documents := []*featureModel{}
+func decodeMongoDocuments(ctx context.Context, cursor *mongo.Cursor) ([]*FeatureModel, error) {
+	documents := []*FeatureModel{}
 
 	for cursor.Next(ctx) {
-		var document = &featureModel{}
+		var document = &FeatureModel{}
 		err := cursor.Decode(document)
 		if err != nil {
 			return nil, errors.NewFailedToDecodeError(err)

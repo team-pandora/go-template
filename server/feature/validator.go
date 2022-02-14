@@ -6,11 +6,12 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-var validate *validator.Validate
+var Validate *validator.Validate = newValidator()
 
-func initValidator() {
-	validate = validator.New()
+func newValidator() *validator.Validate {
+	validate := validator.New()
 	validate.RegisterValidation("custom-validation", customValidation)
+	return validate
 }
 
 func customValidation(field validator.FieldLevel) bool {
