@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
-	"log"
+	"os"
 
 	"github.com/MichaelSimkin/go-template/config"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -20,13 +20,15 @@ func InitMongo() {
 	// Create mongodb client.
 	mongoClient, err := NewMongoClient(config.Config.Mongo.URI)
 	if err != nil {
-		log.Fatalf("failed creating mongodb client: %v", err)
+		fmt.Printf("failed creating mongodb client: %v", err)
+		os.Exit(1)
 	}
 
 	// Get mongodb database.
 	db, err := GetMongoDatabase(mongoClient, config.Config.Mongo.URI)
 	if err != nil {
-		log.Fatalf("failed getting mongodb database: %v", err)
+		fmt.Printf("failed getting mongodb database: %v", err)
+		os.Exit(1)
 	}
 
 	FeatureCollection = db.Collection(config.Config.Mongo.FeatureCollectionName)

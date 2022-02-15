@@ -13,8 +13,8 @@ func main() {
 }
 
 // TODO:
+// - add mongo indexes
 // - add tests
 // - add CI/CD
-// - add logger
 // - add authentication
 // - add swagger

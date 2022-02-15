@@ -1,8 +1,9 @@
 package server
 
 import (
-	"log"
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -30,12 +31,9 @@ func NewServer(port string) Server {
 	}
 
 	ginHandler.Use(
-		gin.Recovery(),
+		LoggerMiddleware(),
 		errorHandler,
-		// TODO:
-		gin.Logger(),
-		// gin.LoggerWithWriter(gin.DefaultWriter, healthcheckRoute),
-		// apmgin.Middleware(r),
+		gin.Recovery(),
 		cors.New(cors.Config{
 			AllowAllOrigins:  true,
 			AllowMethods:     []string{"GET", "PUT", "DELETE", "POST"},
@@ -53,10 +51,11 @@ func NewServer(port string) Server {
 
 // Run starts the server.
 func (s *server) Run() {
-	log.Printf("Server started on port %v\n", s.server.Addr)
+	fmt.Printf("Server started on port %v\n", s.server.Addr)
 
 	if err := s.server.ListenAndServe(); err != nil {
-		log.Fatal(err)
+		fmt.Print(err)
+		os.Exit(1)
 	}
 }
 

@@ -16,7 +16,7 @@ func newValidator() *validator.Validate {
 }
 
 func customValidation(field validator.FieldLevel) bool {
-	matched, err := regexp.MatchString("^[a-zA-Z0-9]+$", field.Field().String())
+	matched, err := regexp.MatchString("^[a-zA-Z0-9,:!?.\\s]+$", field.Field().String())
 	if err != nil {
 		return false
 	}

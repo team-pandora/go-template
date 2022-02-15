@@ -3,7 +3,8 @@ package config
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
+	"os"
 	"time"
 
 	"github.com/MichaelSimkin/go-template/utils"
@@ -62,9 +63,10 @@ func loadEnvVars() {
 	// Log all errors
 	if len(errors) > 0 {
 		for _, err := range errors {
-			log.Println(err)
+			fmt.Println(err)
 		}
-		log.Fatal("Exiting...")
+		fmt.Print("Exiting...")
+		os.Exit(1)
 	}
 }
 
@@ -74,7 +76,8 @@ func loadDotEnv() {
 	if ok {
 		err := envy.Load(envy.Get("DOTENV_FILE_NAME", ".env"))
 		if err != nil {
-			log.Fatal(err)
+			fmt.Print(err)
+			os.Exit(1)
 		}
 	}
 }
@@ -83,7 +86,8 @@ func loadDotEnv() {
 func logPrettyConfig() {
 	prettyConfig, err := json.MarshalIndent(*Config, "    ", "    ")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Print(err)
+		os.Exit(1)
 	}
-	log.Printf("Config: %v\n", string(prettyConfig))
+	fmt.Printf("Config: %v\n", string(prettyConfig))
 }

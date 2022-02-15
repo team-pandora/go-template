@@ -24,15 +24,21 @@ func errorHandler(c *gin.Context) {
 		parsedErrors = append(parsedErrors, parseError(err.Err))
 	}
 
+	var response *errors.ServerError = nil
+
 	if len(parsedErrors) == 1 {
-		c.JSON(parsedErrors[0].Code, parsedErrors[0])
+		response = parsedErrors[0]
 	} else {
-		c.JSON(http.StatusInternalServerError, &errors.ServerError{
+		response = &errors.ServerError{
 			Code:    http.StatusInternalServerError,
 			Message: "Multiple errors occurred",
 			Meta:    errors.ErrorMeta{"errors": parsedErrors},
-		})
+		}
 	}
+
+	c.Set("error", fmt.Sprintf("Error: %v", response))
+
+	c.JSON(response.Code, response)
 }
 
 // parseError parses an error into a ServerError.

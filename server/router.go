@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/MichaelSimkin/go-template/server/errors"
 	"github.com/MichaelSimkin/go-template/server/feature"
 	"github.com/gin-gonic/gin"
 )
@@ -8,7 +9,7 @@ import (
 // useServerRouter registers the server router with the provided gin router.
 func useServerRouter(router *gin.Engine) {
 	router.NoRoute(func(c *gin.Context) {
-		c.String(404, "Invalid Route")
+		c.Error(errors.InvalidRouteError)
 	})
 
 	router.Any("/isAlive", func(c *gin.Context) {

@@ -15,5 +15,11 @@ type ServerError struct {
 }
 
 func (e ServerError) Error() string {
-	return fmt.Sprintf("%d: %s", e.Code, e.Message)
+	if len(e.Meta) == 0 {
+		return fmt.Sprintf("%v.", e.Message)
+	}
+	return fmt.Sprintf("%v, %v.", e.Message, e.Meta)
 }
+
+// InvalidRouteError is used to return an error when the route is not found.
+var InvalidRouteError = ServerError{Code: 400, Message: "Invalid route"}
