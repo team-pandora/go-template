@@ -6,6 +6,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// Validate is the main validator of the feature.
 var Validate *validator.Validate = newValidator()
 
 func newValidator() *validator.Validate {

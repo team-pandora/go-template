@@ -7,13 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Service is used to access the feature service functionality.
 var Service = &service{}
 
 type service struct{}
 
 func (service) createDocumet(c *gin.Context) {
 	// Get the request body and validate it
-	var document = &FeatureModel{}
+	var document = &BaseModel{}
 	if !getRequestBody(c, document) {
 		return
 	}

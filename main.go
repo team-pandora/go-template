@@ -13,7 +13,6 @@ func main() {
 }
 
 // TODO:
-// - add docker related files
 // - add tests
 // - add CI/CD
 // - add logger

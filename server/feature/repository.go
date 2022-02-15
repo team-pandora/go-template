@@ -10,13 +10,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// This exported Repository variable is used to access the repository methods.
+// Repository is used to access the repository methods.
 var Repository = &repository{}
 
 // The repository methods are defined on this struct.
 type repository struct{}
 
-func (repository) createDocument(ctx context.Context, document FeatureModel) (*FeatureModel, error) {
+func (repository) createDocument(ctx context.Context, document BaseModel) (*BaseModel, error) {
 	result, err := database.FeatureCollection.InsertOne(ctx, document)
 	if mongo.IsDuplicateKeyError(err) {
 		return nil, errors.DuplicateKeyError
@@ -35,7 +35,7 @@ func (repository) createDocument(ctx context.Context, document FeatureModel) (*F
 	return &document, nil
 }
 
-func (repository) getDocuments(ctx context.Context, filters string) ([]*FeatureModel, error) {
+func (repository) getDocuments(ctx context.Context, filters string) ([]*BaseModel, error) {
 	// Create the filters object
 	var searchFilters = bson.M{}
 	err := bson.UnmarshalExtJSON([]byte(filters), true, &searchFilters)
@@ -46,7 +46,7 @@ func (repository) getDocuments(ctx context.Context, filters string) ([]*FeatureM
 	// Find the documents in the collection
 	cursor, err := database.FeatureCollection.Find(ctx, searchFilters)
 	if err == mongo.ErrNoDocuments {
-		return []*FeatureModel{}, nil
+		return []*BaseModel{}, nil
 	}
 	if err != nil {
 		return nil, errors.NewUnknownMongoError(err)
@@ -58,11 +58,11 @@ func (repository) getDocuments(ctx context.Context, filters string) ([]*FeatureM
 }
 
 // decodeMongoDocuments decodes the documents returned by the MongoDB cursor.
-func decodeMongoDocuments(ctx context.Context, cursor *mongo.Cursor) ([]*FeatureModel, error) {
-	documents := []*FeatureModel{}
+func decodeMongoDocuments(ctx context.Context, cursor *mongo.Cursor) ([]*BaseModel, error) {
+	documents := []*BaseModel{}
 
 	for cursor.Next(ctx) {
-		var document = &FeatureModel{}
+		var document = &BaseModel{}
 		err := cursor.Decode(document)
 		if err != nil {
 			return nil, errors.NewFailedToDecodeError(err)
