@@ -13,7 +13,7 @@ import (
 type formatter struct {
 }
 
-func (f *formatter) Format(entry *logrus.Entry) ([]byte, error) {
+func (formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	levelDesc := []string{"PANIC", "FATAL", "ERROR", "WARN", "INFO", "DEBUG"}
 	timestamp := entry.Time.Format("02/01/2006 15:04:05.000")
 	return []byte(
@@ -30,10 +30,7 @@ func (f *formatter) Format(entry *logrus.Entry) ([]byte, error) {
 
 // LoggerMiddleware handles logging all gin requests and errors.
 func LoggerMiddleware() gin.HandlerFunc {
-	logger := logrus.New()
-	logger.Out = os.Stdout
-	logger.SetLevel(logrus.DebugLevel)
-	logger.SetFormatter(&formatter{})
+	logger := newLogger()
 
 	return func(c *gin.Context) {
 		// Request start time
@@ -42,15 +39,13 @@ func LoggerMiddleware() gin.HandlerFunc {
 		// Process Request
 		c.Next()
 
-		// Get request duration
-		duration := time.Since(start).String()
-
+		// Set log info
 		log := logger.WithFields(
 			logrus.Fields{
 				"status":   c.Writer.Status(),
 				"method":   c.Request.Method,
 				"path":     c.Request.URL.Path,
-				"duration": duration,
+				"duration": time.Since(start).String(),
 			},
 		)
 
@@ -68,6 +63,15 @@ func LoggerMiddleware() gin.HandlerFunc {
 			log.Info(message)
 		}
 	}
+}
+
+// newLogger creates a new configured logrus logger.
+func newLogger() *logrus.Logger {
+	logger := logrus.New()
+	logger.Out = os.Stdout
+	logger.SetLevel(logrus.DebugLevel)
+	logger.SetFormatter(&formatter{})
+	return logger
 }
 
 // isWarning returns true if the response status in c is 4xx.

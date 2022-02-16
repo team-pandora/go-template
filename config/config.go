@@ -11,11 +11,11 @@ import (
 	"github.com/gobuffalo/envy"
 )
 
-// Service contains the configuration for the service
-var Service service = service{}
+// Service contains the configuration for the service.
+var Service = service{}
 
-// Mongo contains the configuration for MongoDB
-var Mongo mongo = mongo{}
+// Mongo contains the configuration for MongoDB.
+var Mongo = mongo{}
 
 type service struct {
 	Port string `json:"port"`
@@ -29,21 +29,25 @@ type mongo struct {
 	CreateIndexTimeout    time.Duration `json:"createIndexTimeout"`
 }
 
-// config defines the global configuration structure
+// config defines the global configuration structure.
 type config struct {
 	Service service `json:"service"`
 	Mongo   mongo   `json:"mongo"`
 }
 
-// Init loads the configuration from the environment variables
-// If values are not set, the default values are used
+const (
+	defaultMongoTimeout = "10s"
+)
+
+// Init loads the configuration from the environment variables.
+// If values are not set, the default values are used.
 func Init() {
 	loadDotEnv()
 	loadEnvVars()
 	logPrettyConfig(&config{Service, Mongo})
 }
 
-// loadEnvVars loads the configuration from the environment variables
+// loadEnvVars loads the configuration from the environment variables.
 func loadEnvVars() {
 	var errs []error
 	var err error
@@ -54,20 +58,23 @@ func loadEnvVars() {
 	// Mongo
 	Mongo.URI = envy.Get("MONGO_URI", "mongodb://localhost:27017")
 	Mongo.FeatureCollectionName = envy.Get("MONGO_FEATURE_COLLECTION_NAME", "features")
-	Mongo.ConnectionTimeout, err = time.ParseDuration(envy.Get("MONGO_CONNECTION_TIMEOUT", "10s"))
+	Mongo.ConnectionTimeout, err = time.ParseDuration(envy.Get("MONGO_CONNECTION_TIMEOUT", defaultMongoTimeout))
 	if err != nil {
 		errs = append(errs, err)
 	}
-	Mongo.ClientPingTimeout, err = time.ParseDuration(envy.Get("CLIENT_PING_TIMEOUT", "10s"))
+	Mongo.ClientPingTimeout, err = time.ParseDuration(envy.Get("CLIENT_PING_TIMEOUT", defaultMongoTimeout))
 	if err != nil {
 		errs = append(errs, err)
 	}
-	Mongo.CreateIndexTimeout, err = time.ParseDuration(envy.Get("CREATE_INDEX_TIMEOUT", "10s"))
+	Mongo.CreateIndexTimeout, err = time.ParseDuration(envy.Get("CREATE_INDEX_TIMEOUT", defaultMongoTimeout))
 	if err != nil {
 		errs = append(errs, err)
 	}
 
-	// Log all errors
+	logConfigErrors(errs)
+}
+
+func logConfigErrors(errs []error) {
 	if len(errs) > 0 {
 		for _, err := range errs {
 			fmt.Println(err)
@@ -76,7 +83,7 @@ func loadEnvVars() {
 	}
 }
 
-// loadDotEnv loads the .env file if LOAD_DOTENV env variable is truthy
+// loadDotEnv loads the .env file if LOAD_DOTENV env variable is truthy.
 func loadDotEnv() {
 	_, ok := utils.Truthy[envy.Get("LOAD_DOTENV", "false")]
 	if ok {
@@ -87,7 +94,7 @@ func loadDotEnv() {
 	}
 }
 
-// logPrettyConfig logs the configuration in a pretty format
+// logPrettyConfig logs the configuration in a pretty format.
 func logPrettyConfig(config *config) {
 	prettyConfig, err := json.MarshalIndent(config, "    ", "    ")
 	if err != nil {

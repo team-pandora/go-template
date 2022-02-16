@@ -10,7 +10,8 @@ import (
 
 // errorHandler executes all the middlewares and then checks for errors.
 // If an error is found, it is parsed into a ServerError and sent to the client.
-// If multiple errors are found, they are all parsed into ServerErrors and sent to the client as a single ServerError that contains all errors in the Meta field.
+// If multiple errors are found, they are all parsed into ServerErrors and sent to the client as a single ServerError that contains all errors in
+// the Meta field.
 func errorHandler(c *gin.Context) {
 	// Execute all middleware logic
 	c.Next()
@@ -24,7 +25,7 @@ func errorHandler(c *gin.Context) {
 		parsedErrors = append(parsedErrors, parseError(err.Err))
 	}
 
-	var response *errors.ServerError = nil
+	var response *errors.ServerError
 
 	if len(parsedErrors) == 1 {
 		response = parsedErrors[0]
