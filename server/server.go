@@ -3,7 +3,6 @@ package server
 import (
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -54,8 +53,7 @@ func (s *server) Run() {
 	fmt.Printf("Server started on port %v\n", s.server.Addr)
 
 	if err := s.server.ListenAndServe(); err != nil {
-		fmt.Print(err)
-		os.Exit(1)
+		panic(fmt.Errorf("Failed starting server: %v", err))
 	}
 }
 

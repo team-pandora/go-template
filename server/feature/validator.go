@@ -11,7 +11,10 @@ var Validate *validator.Validate = newValidator()
 
 func newValidator() *validator.Validate {
 	validate := validator.New()
-	validate.RegisterValidation("custom-validation", customValidation)
+	err := validate.RegisterValidation("custom-validation", customValidation)
+	if err != nil {
+		panic(err)
+	}
 	return validate
 }
 
