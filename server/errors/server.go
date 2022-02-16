@@ -2,6 +2,7 @@ package errors
 
 import (
 	"fmt"
+	"net/http"
 )
 
 // ErrorMeta is a map of key value pairs that can be used to add additional information to an error.
@@ -22,4 +23,4 @@ func (e ServerError) Error() string {
 }
 
 // InvalidRouteError is used to return an error when the route is not found.
-var InvalidRouteError = ServerError{Code: 400, Message: "Invalid route"}
+var InvalidRouteError = ServerError{Code: http.StatusBadRequest, Message: "Invalid route"}

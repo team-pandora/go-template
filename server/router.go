@@ -1,6 +1,8 @@
 package server
 
 import (
+	"net/http"
+
 	"github.com/MichaelSimkin/go-template/server/errors"
 	"github.com/MichaelSimkin/go-template/server/feature"
 	"github.com/MichaelSimkin/go-template/utils"
@@ -14,7 +16,7 @@ func useServerRouter(router *gin.Engine) {
 	})
 
 	router.Any("/isAlive", func(c *gin.Context) {
-		c.String(200, "OK")
+		c.String(http.StatusOK, "OK")
 	})
 
 	apiRouter := router.Group("/api")
