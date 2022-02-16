@@ -9,7 +9,7 @@ import (
 func main() {
 	config.Init()
 	database.InitMongo()
-	server.Serve(config.Config.Service.Port)
+	server.Serve(config.Service.Port)
 }
 
 // TODO:

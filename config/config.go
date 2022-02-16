@@ -11,21 +11,28 @@ import (
 	"github.com/gobuffalo/envy"
 )
 
-// Config holds the global configuration for the service
-var Config = &config{}
+// Service contains the configuration for the service
+var Service service = service{}
+
+// Mongo contains the configuration for MongoDB
+var Mongo mongo = mongo{}
+
+type service struct {
+	Port string `json:"port"`
+}
+
+type mongo struct {
+	URI                   string        `json:"URI"`
+	FeatureCollectionName string        `json:"featureCollectionName"`
+	ConnectionTimeout     time.Duration `json:"connectionTimeout"`
+	ClientPingTimeout     time.Duration `json:"clientPingTimeout"`
+	CreateIndexTimeout    time.Duration `json:"createIndexTimeout"`
+}
 
 // config defines the global configuration structure
 type config struct {
-	Service struct {
-		Port string `json:"port"`
-	} `json:"service"`
-	Mongo struct {
-		URI                   string        `json:"URI"`
-		FeatureCollectionName string        `json:"featureCollectionName"`
-		ConnectionTimeout     time.Duration `json:"connectionTimeout"`
-		ClientPingTimeout     time.Duration `json:"clientPingTimeout"`
-		CreateIndexTimeout    time.Duration `json:"createIndexTimeout"`
-	} `json:"mongo"`
+	Service service `json:"service"`
+	Mongo   mongo   `json:"mongo"`
 }
 
 // Init loads the configuration from the environment variables
@@ -33,7 +40,7 @@ type config struct {
 func Init() {
 	loadDotEnv()
 	loadEnvVars()
-	logPrettyConfig()
+	logPrettyConfig(&config{Service, Mongo})
 }
 
 // loadEnvVars loads the configuration from the environment variables
@@ -42,20 +49,20 @@ func loadEnvVars() {
 	var err error
 
 	// Service
-	Config.Service.Port = envy.Get("PORT", "3000")
+	Service.Port = envy.Get("PORT", "3000")
 
 	// Mongo
-	Config.Mongo.URI = envy.Get("MONGO_URI", "mongodb://localhost:27017")
-	Config.Mongo.FeatureCollectionName = envy.Get("MONGO_FEATURE_COLLECTION_NAME", "features")
-	Config.Mongo.ConnectionTimeout, err = time.ParseDuration(envy.Get("MONGO_CONNECTION_TIMEOUT", "10s"))
+	Mongo.URI = envy.Get("MONGO_URI", "mongodb://localhost:27017")
+	Mongo.FeatureCollectionName = envy.Get("MONGO_FEATURE_COLLECTION_NAME", "features")
+	Mongo.ConnectionTimeout, err = time.ParseDuration(envy.Get("MONGO_CONNECTION_TIMEOUT", "10s"))
 	if err != nil {
 		errors = append(errors, err)
 	}
-	Config.Mongo.ClientPingTimeout, err = time.ParseDuration(envy.Get("CLIENT_PING_TIMEOUT", "10s"))
+	Mongo.ClientPingTimeout, err = time.ParseDuration(envy.Get("CLIENT_PING_TIMEOUT", "10s"))
 	if err != nil {
 		errors = append(errors, err)
 	}
-	Config.Mongo.CreateIndexTimeout, err = time.ParseDuration(envy.Get("CREATE_INDEX_TIMEOUT", "10s"))
+	Mongo.CreateIndexTimeout, err = time.ParseDuration(envy.Get("CREATE_INDEX_TIMEOUT", "10s"))
 	if err != nil {
 		errors = append(errors, err)
 	}
@@ -83,8 +90,8 @@ func loadDotEnv() {
 }
 
 // logPrettyConfig logs the configuration in a pretty format
-func logPrettyConfig() {
-	prettyConfig, err := json.MarshalIndent(*Config, "    ", "    ")
+func logPrettyConfig(config *config) {
+	prettyConfig, err := json.MarshalIndent(config, "    ", "    ")
 	if err != nil {
 		fmt.Print(err)
 		os.Exit(1)

@@ -19,14 +19,14 @@ var FeatureCollection *mongo.Collection
 // InitMongo initializes the Mongo exported variable.
 func InitMongo() {
 	// Create mongodb client.
-	mongoClient, err := NewMongoClient(config.Config.Mongo.URI)
+	mongoClient, err := NewMongoClient(config.Mongo.URI)
 	if err != nil {
 		fmt.Printf("failed creating mongodb client: %v", err)
 		os.Exit(1)
 	}
 
 	// Get mongodb database.
-	db, err := GetMongoDatabase(mongoClient, config.Config.Mongo.URI)
+	db, err := GetMongoDatabase(mongoClient, config.Mongo.URI)
 	if err != nil {
 		fmt.Printf("failed getting mongodb database: %v", err)
 		os.Exit(1)
@@ -36,7 +36,7 @@ func InitMongo() {
 }
 
 func initFeatureCollection(db *mongo.Database) {
-	FeatureCollection = db.Collection(config.Config.Mongo.FeatureCollectionName)
+	FeatureCollection = db.Collection(config.Mongo.FeatureCollectionName)
 	CreateMongoCollectionIndex(FeatureCollection, mongo.IndexModel{
 		Keys:    bson.M{"_id": "hashed"},
 		Options: options.Index().SetUnique(true),
@@ -59,7 +59,7 @@ func NewMongoClient(connectionString string) (*mongo.Client, error) {
 	}
 
 	// Connect client to mongodb.
-	connectionTimeoutCtx, cancelConn := context.WithTimeout(context.Background(), config.Config.Mongo.ConnectionTimeout)
+	connectionTimeoutCtx, cancelConn := context.WithTimeout(context.Background(), config.Mongo.ConnectionTimeout)
 	defer cancelConn()
 	err = mongoClient.Connect(connectionTimeoutCtx)
 	if err != nil {
@@ -67,7 +67,7 @@ func NewMongoClient(connectionString string) (*mongo.Client, error) {
 	}
 
 	// Check the connection.
-	pingTimeoutCtx, cancelPing := context.WithTimeout(context.Background(), config.Config.Mongo.ClientPingTimeout)
+	pingTimeoutCtx, cancelPing := context.WithTimeout(context.Background(), config.Mongo.ClientPingTimeout)
 	defer cancelPing()
 	err = mongoClient.Ping(pingTimeoutCtx, readpref.Primary())
 	if err != nil {
@@ -89,7 +89,7 @@ func GetMongoDatabase(mongoClient *mongo.Client, connectionString string) (*mong
 
 // CreateMongoCollectionIndex creates a mongodb collection index.
 func CreateMongoCollectionIndex(collection *mongo.Collection, indexModel mongo.IndexModel) (string, error) {
-	createIndexTimeoutCtx, cancelCreateIndex := context.WithTimeout(context.Background(), config.Config.Mongo.CreateIndexTimeout)
+	createIndexTimeoutCtx, cancelCreateIndex := context.WithTimeout(context.Background(), config.Mongo.CreateIndexTimeout)
 	defer cancelCreateIndex()
 	index, err := collection.Indexes().CreateOne(createIndexTimeoutCtx, indexModel)
 	if err != nil {
