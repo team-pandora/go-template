@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/MichaelSimkin/go-template/config"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -31,7 +32,21 @@ func InitMongo() {
 		os.Exit(1)
 	}
 
+	initFeatureCollection(db)
+}
+
+func initFeatureCollection(db *mongo.Database) {
 	FeatureCollection = db.Collection(config.Config.Mongo.FeatureCollectionName)
+	CreateMongoCollectionIndex(FeatureCollection, mongo.IndexModel{
+		Keys:    bson.M{"_id": "hashed"},
+		Options: options.Index().SetUnique(true),
+	})
+	CreateMongoCollectionIndex(FeatureCollection, mongo.IndexModel{
+		Keys: bson.M{"data": "text"},
+	})
+	CreateMongoCollectionIndex(FeatureCollection, mongo.IndexModel{
+		Keys: bson.M{"updatedAt": -1},
+	})
 }
 
 // NewMongoClient creates a new mongodb client and connects to mongodb.

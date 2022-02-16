@@ -43,6 +43,14 @@ func (repository) getDocuments(ctx context.Context, filters string) ([]*BaseMode
 		return nil, errors.NewInvalidFiltersError(err)
 	}
 
+	// Format _id field to ObjectID
+	if id, ok := searchFilters["_id"].(string); ok {
+		searchFilters["_id"], err = primitive.ObjectIDFromHex(id)
+		if err != nil {
+			return nil, errors.NewInvalidFiltersError(err)
+		}
+	}
+
 	// Find the documents in the collection
 	cursor, err := database.FeatureCollection.Find(ctx, searchFilters)
 	if err == mongo.ErrNoDocuments {
