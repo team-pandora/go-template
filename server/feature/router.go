@@ -2,6 +2,7 @@ package feature
 
 import (
 	"github.com/MichaelSimkin/go-template/server/errors"
+	"github.com/MichaelSimkin/go-template/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,14 +13,6 @@ func RegisterRotuer(router *gin.RouterGroup) {
 
 	// Tests for error handling
 	router.GET("/error", func(c *gin.Context) {
-		c.Error(errors.FeatureError)
-		c.Abort()
-	})
-	// Tests for error handling
-	router.GET("/multipleErrors", func(c *gin.Context) {
-		c.Error(errors.FeatureError)
-		c.Error(errors.FeatureError)
-		c.Error(errors.FeatureError)
-		c.Abort()
+		utils.GinAbortWithError(c, errors.FeatureError)
 	})
 }

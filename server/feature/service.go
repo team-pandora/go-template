@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/MichaelSimkin/go-template/server/errors"
+	"github.com/MichaelSimkin/go-template/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,8 +26,7 @@ func (service) createDocumet(c *gin.Context) {
 	// Create the document in the database
 	result, err := Repository.createDocument(c.Request.Context(), *document)
 	if err != nil {
-		c.Error(err)
-		c.Abort()
+		utils.GinAbortWithError(c, err)
 		return
 	}
 
@@ -44,8 +44,7 @@ func (service) getDocumets(c *gin.Context) {
 	// Get the documents from the database
 	result, err := Repository.getDocuments(c.Request.Context(), filters)
 	if err != nil {
-		c.Error(err)
-		c.Abort()
+		utils.GinAbortWithError(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, result)
@@ -63,8 +62,7 @@ func getRequestBody(c *gin.Context, body interface{}) bool {
 func bindRequestBody(c *gin.Context, body interface{}) bool {
 	err := c.ShouldBindJSON(body)
 	if err != nil {
-		c.Error(errors.NewInvalidRequestError(err))
-		c.Abort()
+		utils.GinAbortWithError(c, errors.NewInvalidRequestError(err))
 		return false
 	}
 	return true
@@ -74,8 +72,7 @@ func bindRequestBody(c *gin.Context, body interface{}) bool {
 func validateRequestBody(c *gin.Context, body interface{}) bool {
 	err := Validate.Struct(body)
 	if err != nil {
-		c.Error(errors.NewInvalidRequestError(err))
-		c.Abort()
+		utils.GinAbortWithError(c, errors.NewInvalidRequestError(err))
 		return false
 	}
 	return true

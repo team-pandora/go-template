@@ -3,7 +3,6 @@ package database
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/MichaelSimkin/go-template/config"
 	"go.mongodb.org/mongo-driver/bson"
@@ -21,15 +20,13 @@ func InitMongo() {
 	// Create mongodb client.
 	mongoClient, err := NewMongoClient(config.Mongo.URI)
 	if err != nil {
-		fmt.Printf("failed creating mongodb client: %v", err)
-		os.Exit(1)
+		panic(fmt.Errorf("failed creating mongodb client: %v", err))
 	}
 
 	// Get mongodb database.
 	db, err := GetMongoDatabase(mongoClient, config.Mongo.URI)
 	if err != nil {
-		fmt.Printf("failed getting mongodb database: %v", err)
-		os.Exit(1)
+		panic(fmt.Errorf("failed getting mongodb database: %v", err))
 	}
 
 	initFeatureCollection(db)
@@ -37,10 +34,6 @@ func InitMongo() {
 
 func initFeatureCollection(db *mongo.Database) {
 	FeatureCollection = db.Collection(config.Mongo.FeatureCollectionName)
-	CreateMongoCollectionIndex(FeatureCollection, mongo.IndexModel{
-		Keys:    bson.M{"_id": "hashed"},
-		Options: options.Index().SetUnique(true),
-	})
 	CreateMongoCollectionIndex(FeatureCollection, mongo.IndexModel{
 		Keys: bson.M{"data": "text"},
 	})
@@ -88,13 +81,11 @@ func GetMongoDatabase(mongoClient *mongo.Client, connectionString string) (*mong
 }
 
 // CreateMongoCollectionIndex creates a mongodb collection index.
-func CreateMongoCollectionIndex(collection *mongo.Collection, indexModel mongo.IndexModel) (string, error) {
+func CreateMongoCollectionIndex(collection *mongo.Collection, indexModel mongo.IndexModel) {
 	createIndexTimeoutCtx, cancelCreateIndex := context.WithTimeout(context.Background(), config.Mongo.CreateIndexTimeout)
 	defer cancelCreateIndex()
-	index, err := collection.Indexes().CreateOne(createIndexTimeoutCtx, indexModel)
+	_, err := collection.Indexes().CreateOne(createIndexTimeoutCtx, indexModel)
 	if err != nil {
-		return "", fmt.Errorf("failed to create a collection index, %v", err)
+		panic(fmt.Errorf("failed creating collection index: %v", err))
 	}
-
-	return index, nil
 }

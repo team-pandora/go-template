@@ -14,10 +14,10 @@ func NewInvalidRequestError(err error) ServerError {
 }
 
 // DuplicateKeyError is used when a mongo duplicate key error occurs.
-var DuplicateKeyError = ServerError{Code: http.StatusConflict, Message: "Document already exists"}
+var DuplicateKeyError ServerError = ServerError{Code: http.StatusConflict, Message: "Document already exists"}
 
 // InvalidMongoIDError is used when a returned mongo ID is invalid.
-var InvalidMongoIDError = ServerError{Code: http.StatusConflict, Message: "Mongo returned invalid id"}
+var InvalidMongoIDError ServerError = ServerError{Code: http.StatusConflict, Message: "Mongo returned invalid id"}
 
 // NewUnknownMongoError creates a new unknown mongo error with the provided error in the meta.
 func NewUnknownMongoError(err error) ServerError {

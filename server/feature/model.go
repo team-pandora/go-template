@@ -16,8 +16,8 @@ type BaseModel struct {
 
 // setTimestamps sets the createdAt and updatedAt fields to the current time.
 func (feature *BaseModel) setTimestamps() {
-	feature.CreatedAt = time.Now()
-	feature.UpdatedAt = feature.CreatedAt
+	feature.setUpdatedAt()
+	feature.CreatedAt = feature.UpdatedAt
 }
 
 // setUpdatedAt sets the updatedAt field to the current time.
