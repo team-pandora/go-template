@@ -1,0 +1,49 @@
+name: lint and test
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: latest
+
+  test:
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+
+    services:
+      mongo:
+        image: mongo
+        ports:
+          - 27017:27017
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: arnested/go-version-action@v1
+        id: go-version
+
+      - name: Install Go ${{ steps.go-version.outputs.latest }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ steps.go-version.outputs.latest }}
+
+      - name: go test
+        run: go test -v . --ginkgo.no-color
+        env:
+          GO_TEST_TIMEOUT: "10m"
+          GO111MODULE: "on"
+          LOAD_DOTENV: "true"
+          DOTENV_FILE_NAME: "test.env"
+          TEST: "true"
+          GIN_MODE: "release"

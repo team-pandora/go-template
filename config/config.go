@@ -4,7 +4,6 @@ package config
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/MichaelSimkin/go-template/utils"
@@ -18,6 +17,7 @@ var Service = service{}
 var Mongo = mongo{}
 
 type service struct {
+	Test bool   `json:"test"`
 	Port string `json:"port"`
 }
 
@@ -53,10 +53,12 @@ func loadEnvVars() {
 	var err error
 
 	// Service
+	_, ok := utils.Truthy[envy.Get("TEST", "false")]
+	Service.Test = ok
 	Service.Port = envy.Get("PORT", "3000")
 
 	// Mongo
-	Mongo.URI = envy.Get("MONGO_URI", "mongodb://localhost:27017")
+	Mongo.URI = envy.Get("MONGO_URI", "mongodb://localhost:27017/test-db")
 	Mongo.FeatureCollectionName = envy.Get("MONGO_FEATURE_COLLECTION_NAME", "features")
 	Mongo.ConnectionTimeout, err = time.ParseDuration(envy.Get("MONGO_CONNECTION_TIMEOUT", defaultMongoTimeout))
 	if err != nil {
@@ -77,9 +79,9 @@ func loadEnvVars() {
 func logConfigErrors(errs []error) {
 	if len(errs) > 0 {
 		for _, err := range errs {
-			fmt.Println(err)
+			utils.Log.Error(err)
 		}
-		panic(errors.New("Error loading configuration"))
+		panic(errors.New("error loading configuration"))
 	}
 }
 
@@ -100,5 +102,5 @@ func logPrettyConfig(config *config) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("Config: %v\n", string(prettyConfig))
+	utils.Log.Infof("Config: %v\n", string(prettyConfig))
 }

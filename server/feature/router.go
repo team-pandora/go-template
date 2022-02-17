@@ -8,8 +8,8 @@ import (
 
 // RegisterRotuer registers the feature router with the provided gin router.
 func RegisterRotuer(router *gin.RouterGroup) {
-	router.POST("/", Service.createDocumet)
-	router.GET("/", Service.getDocumets)
+	router.POST("/", Service.CreateDocumet)
+	router.GET("/", Service.GetDocumets)
 
 	// Tests for error handling
 	router.GET("/error", func(c *gin.Context) {

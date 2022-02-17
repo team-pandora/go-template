@@ -13,7 +13,7 @@ var Service = &service{}
 
 type service struct{}
 
-func (service) createDocumet(c *gin.Context) {
+func (service) CreateDocumet(c *gin.Context) {
 	// Get the request body and validate it
 	var document = &BaseModel{}
 	if !getRequestBody(c, document) {
@@ -24,7 +24,7 @@ func (service) createDocumet(c *gin.Context) {
 	document.setTimestamps()
 
 	// Create the document in the database
-	result, err := Repository.createDocument(c.Request.Context(), *document)
+	result, err := Repository.CreateDocument(c.Request.Context(), *document)
 	if err != nil {
 		utils.GinAbortWithError(c, err)
 		return
@@ -34,7 +34,7 @@ func (service) createDocumet(c *gin.Context) {
 	c.JSON(http.StatusCreated, result)
 }
 
-func (service) getDocumets(c *gin.Context) {
+func (service) GetDocumets(c *gin.Context) {
 	// Get filters from query string or set to default empty filters
 	filters, ok := c.GetQuery("filters")
 	if !ok {
@@ -42,7 +42,7 @@ func (service) getDocumets(c *gin.Context) {
 	}
 
 	// Get the documents from the database
-	result, err := Repository.getDocuments(c.Request.Context(), filters)
+	result, err := Repository.GetDocuments(c.Request.Context(), filters)
 	if err != nil {
 		utils.GinAbortWithError(c, err)
 		return

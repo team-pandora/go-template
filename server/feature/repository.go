@@ -16,7 +16,7 @@ var Repository = &repository{}
 // The repository methods are defined on this struct.
 type repository struct{}
 
-func (repository) createDocument(ctx context.Context, document BaseModel) (*BaseModel, error) {
+func (repository) CreateDocument(ctx context.Context, document BaseModel) (*BaseModel, error) {
 	result, err := database.FeatureCollection.InsertOne(ctx, document)
 	if mongo.IsDuplicateKeyError(err) {
 		return nil, errors.DuplicateKeyError
@@ -35,7 +35,7 @@ func (repository) createDocument(ctx context.Context, document BaseModel) (*Base
 	return &document, nil
 }
 
-func (repository) getDocuments(ctx context.Context, filters string) ([]*BaseModel, error) {
+func (repository) GetDocuments(ctx context.Context, filters string) ([]*BaseModel, error) {
 	// Create the filters object
 	var searchFilters = bson.M{}
 	err := bson.UnmarshalExtJSON([]byte(filters), true, &searchFilters)
@@ -43,12 +43,13 @@ func (repository) getDocuments(ctx context.Context, filters string) ([]*BaseMode
 		return nil, errors.NewInvalidFiltersError(err)
 	}
 
-	// Format _id field to ObjectID
-	if id, ok := searchFilters["_id"].(string); ok {
+	// Format id field to _id ObjectID field
+	if id, ok := searchFilters["id"].(string); ok {
 		searchFilters["_id"], err = primitive.ObjectIDFromHex(id)
 		if err != nil {
 			return nil, errors.NewInvalidFiltersError(err)
 		}
+		delete(searchFilters, "id")
 	}
 
 	// Find the documents in the collection

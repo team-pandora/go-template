@@ -45,13 +45,13 @@ func errorHandler(c *gin.Context) {
 // parseError parses an error into a ServerError.
 // If the error is not a predefined error, parse it into a ServerError.
 func parseError(err error) *errors.ServerError {
-	switch err := err.(type) {
+	switch parsedErr := err.(type) {
 	case errors.ServerError:
-		return &err
+		return &parsedErr
 	default:
 		return &errors.ServerError{
 			Code:    http.StatusInternalServerError,
-			Message: fmt.Sprintf("Internal Server Error: %v", err),
-			Meta:    errors.ErrorMeta{"error": err}}
+			Message: fmt.Sprintf("Internal Server Error: %v", parsedErr),
+			Meta:    errors.ErrorMeta{"error": parsedErr}}
 	}
 }
