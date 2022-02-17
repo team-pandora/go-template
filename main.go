@@ -13,7 +13,5 @@ func main() {
 }
 
 // TODO:
-// - add tests
-// - add CI/CD
-// - add authentication
+// - add tests + CI/CD
 // - add swagger
