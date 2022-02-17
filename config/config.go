@@ -4,7 +4,6 @@ package config
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/MichaelSimkin/go-template/utils"
@@ -77,7 +76,7 @@ func loadEnvVars() {
 func logConfigErrors(errs []error) {
 	if len(errs) > 0 {
 		for _, err := range errs {
-			fmt.Println(err)
+			utils.Log.Error(err)
 		}
 		panic(errors.New("Error loading configuration"))
 	}
@@ -100,5 +99,5 @@ func logPrettyConfig(config *config) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("Config: %v\n", string(prettyConfig))
+	utils.Log.Infof("Config: %v\n", string(prettyConfig))
 }

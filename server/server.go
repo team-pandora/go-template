@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/MichaelSimkin/go-template/utils"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -50,7 +51,7 @@ func NewServer(port string) Server {
 
 // Run starts the server.
 func (s *server) Run() {
-	fmt.Printf("Server started on port %v\n", s.server.Addr)
+	utils.Log.Infof("Server started on port %v\n", s.server.Addr)
 
 	if err := s.server.ListenAndServe(); err != nil {
 		panic(fmt.Errorf("Failed starting server: %v", err))
