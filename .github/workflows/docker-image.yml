@@ -30,6 +30,7 @@ jobs:
         run: echo "IMAGE=${{ env.REGISTRY }}/${REPO,,}:latest" >>${GITHUB_ENV}
         env:
           REPO: "${{ github.repository }}"
+
       - name: Build the image
         run: docker build -t ${{ env.IMAGE }} .
 
