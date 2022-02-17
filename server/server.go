@@ -54,7 +54,7 @@ func (s *server) Run() {
 	utils.Log.Infof("Server started on port %v\n", s.server.Addr)
 
 	if err := s.server.ListenAndServe(); err != nil {
-		panic(fmt.Errorf("Failed starting server: %v", err))
+		panic(fmt.Errorf("failed starting server: %v", err))
 	}
 }
 

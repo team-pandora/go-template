@@ -2,10 +2,12 @@ package server
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/MichaelSimkin/go-template/config"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -69,6 +71,9 @@ func LoggerMiddleware() gin.HandlerFunc {
 func newLogger() *logrus.Logger {
 	logger := logrus.New()
 	logger.Out = os.Stdout
+	if config.Service.Test {
+		logger.Out = ioutil.Discard
+	}
 	logger.SetLevel(logrus.DebugLevel)
 	logger.SetFormatter(&formatter{})
 	return logger

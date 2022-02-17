@@ -2,8 +2,10 @@ package utils
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 
+	"github.com/gobuffalo/envy"
 	"github.com/sirupsen/logrus"
 )
 
@@ -27,6 +29,9 @@ func (formatter) Format(entry *logrus.Entry) ([]byte, error) {
 func initLogger() *logrus.Logger {
 	logger := logrus.New()
 	logger.Out = os.Stdout
+	if _, ok := Truthy[envy.Get("TEST", "false")]; ok {
+		logger.Out = ioutil.Discard
+	}
 	logger.SetLevel(logrus.DebugLevel)
 	logger.SetFormatter(&formatter{})
 	return logger

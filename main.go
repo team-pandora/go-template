@@ -13,5 +13,4 @@ func main() {
 }
 
 // TODO:
-// - add tests + CI/CD
 // - add swagger
