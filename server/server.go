@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/MichaelSimkin/go-template/utils"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/team-pandora/go-template/utils"
 )
 
 // Server is the interface for the server.

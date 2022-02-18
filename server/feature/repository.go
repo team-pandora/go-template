@@ -3,8 +3,8 @@ package feature
 import (
 	"context"
 
-	"github.com/MichaelSimkin/go-template/database"
-	"github.com/MichaelSimkin/go-template/server/errors"
+	"github.com/team-pandora/go-template/database"
+	"github.com/team-pandora/go-template/server/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/MichaelSimkin/go-template/config"
-	"github.com/MichaelSimkin/go-template/server/errors"
-	"github.com/MichaelSimkin/go-template/server/feature"
-	"github.com/MichaelSimkin/go-template/utils"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"github.com/team-pandora/go-template/config"
+	"github.com/team-pandora/go-template/server/errors"
+	"github.com/team-pandora/go-template/server/feature"
+	"github.com/team-pandora/go-template/utils"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

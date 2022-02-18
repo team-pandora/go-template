@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/MichaelSimkin/go-template/config"
+	"github.com/team-pandora/go-template/config"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

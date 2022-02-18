@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/MichaelSimkin/go-template/config"
-	"github.com/MichaelSimkin/go-template/database"
-	"github.com/MichaelSimkin/go-template/server"
+	"github.com/team-pandora/go-template/config"
+	"github.com/team-pandora/go-template/database"
+	"github.com/team-pandora/go-template/server"
 )
 
 func main() {
@@ -11,6 +11,3 @@ func main() {
 	database.InitMongo()
 	server.Serve(config.Service.Port)
 }
-
-// TODO:
-// - add swagger

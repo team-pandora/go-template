@@ -1,4 +1,4 @@
-module github.com/MichaelSimkin/go-template
+module github.com/team-pandora/go-template
 
 go 1.17
 

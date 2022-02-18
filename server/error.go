@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/MichaelSimkin/go-template/server/errors"
 	"github.com/gin-gonic/gin"
+	"github.com/team-pandora/go-template/server/errors"
 )
 
 // errorHandler executes all the middlewares and then checks for errors.

@@ -6,8 +6,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/MichaelSimkin/go-template/utils"
 	"github.com/gobuffalo/envy"
+	"github.com/team-pandora/go-template/utils"
 )
 
 // Service contains the configuration for the service.

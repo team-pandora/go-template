@@ -7,9 +7,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/MichaelSimkin/go-template/config"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/team-pandora/go-template/config"
 )
 
 type formatter struct {

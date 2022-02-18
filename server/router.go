@@ -3,10 +3,10 @@ package server
 import (
 	"net/http"
 
-	"github.com/MichaelSimkin/go-template/server/errors"
-	"github.com/MichaelSimkin/go-template/server/feature"
-	"github.com/MichaelSimkin/go-template/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/team-pandora/go-template/server/errors"
+	"github.com/team-pandora/go-template/server/feature"
+	"github.com/team-pandora/go-template/utils"
 )
 
 // useServerRouter registers the server router with the provided gin router.
