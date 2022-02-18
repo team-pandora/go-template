@@ -11,6 +11,3 @@ func main() {
 	database.InitMongo()
 	server.Serve(config.Service.Port)
 }
-
-// TODO:
-// - add swagger
